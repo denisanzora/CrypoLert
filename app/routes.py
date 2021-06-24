@@ -11,8 +11,16 @@ from flask_login import login_user, current_user, logout_user, login_required
 @app.route("/")
 @app.route("/home")
 def home():
-    page = request.args.get('page', 1, type=int)
-    return render_template('home.html', title='Home')
+    #page = request.args.get('page', 1, type=int)
+    if current_user.is_authenticated:
+        return render_template('home.html', title='Home')
+
+    return render_template('welcome.html', title='Welcome')
+
+
+@app.route("/welcome")
+def welcome():
+    return render_template('welcome.html', title='Welcome')
 
 @app.route("/about")
 def about():
@@ -50,7 +58,7 @@ def login():
 @app.route("/logout")
 def logout():
     logout_user()
-    return redirect(url_for('home'))  
+    return redirect(url_for('welcome'))  
 
 def save_picture(form_picture):
     random_hex = secrets.token_hex(8)
